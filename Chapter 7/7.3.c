@@ -1,23 +1,30 @@
 #include<stdio.h>
 int main(){
-    char a;
-    int oushu,jishu;
-    double pingjuno,pingjunj;
-    pingjunj=pingjuno=0;
-    oushu=jishu=0;
-    while ((a=getchar())!='0')
+    int j,o,sumj,sumo,a;
+    j=o=sumj=sumo=0;
+    double ou,ji;
+    ou=ji=0.0;
+    while (1)
     {
-        if(a!='\n'){
+        scanf("%d",&a);
+        if(a!=0){
             if(a%2==0){
-                oushu++;
-                pingjuno=(a+pingjuno)/(double)oushu;
+                o++;
+                sumo+=a;
             }
             else{
-                jishu++;
-                pingjunj=(a+pingjunj)/(double)jishu;
+                j++;
+                sumj+=a;
             }
         }
+        else{
+            break;
+        }
     }
-    printf("The number of oushu is %d ,average is %.2lf\n",oushu,pingjuno);
-    printf("The number of jishu is %d ,average is %.2lf\n",jishu,pingjunj);
+    if(o>0){
+        ou=sumo/(double)o;}
+    if(j>0){
+        ji=sumj/(double)j;}
+    printf("the number of oushu is %d ,average is %.2lf\n",o,ou);
+    printf("the number of jishu is %d ,average is %.2lf",j,ji);
 }
