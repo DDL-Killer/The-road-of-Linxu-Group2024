@@ -25,7 +25,7 @@ int main(){
     if(one(num)||two(num)){
         U=1;
     }
-    if((one(num)&&!two(num))&&(!one(num)&&two(num))){
+    if((one(num)&&!two(num))||(!one(num)&&two(num))){
         B=1;
     }
     if(!one(num)&&!two(num)){
