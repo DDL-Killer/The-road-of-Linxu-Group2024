@@ -123,3 +123,6 @@ void strbuf_insert(struct strbuf *sb,size_t pos,const void *data,size_t len){
     memmove(sb->buf+pos+len,sb->buf+pos,sb->len-pos);
     memcpy(sb->buf+pos,data,len);
 }
+
+
+
