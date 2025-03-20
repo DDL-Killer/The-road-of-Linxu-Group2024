@@ -124,5 +124,30 @@ void strbuf_insert(struct strbuf *sb,size_t pos,const void *data,size_t len){
     memcpy(sb->buf+pos,data,len);
 }
 
+//-----------------------------------------------------------------------------------
+
+//去除sb缓冲区左端的空格、制表符和‘\t’字符
+void strbuf_ltrim(struct strbuf *sb){
+    int i=0;
+    while(sb->buf[i]==' '||sb->buf[i]=='\t') i++;
+    memmove(sb->buf,sb->buf+i,sb->len-i);
+    sb->len-=i;
+}
+
+//去除sb缓冲区右端的空格、制表符和‘\t’字符
+void strbuf_rtrim(struct strbuf *sb){
+    int i=sb->len-1;
+    while(sb->buf[i]==' '||sb->buf[i]=='\t') i--;
+    sb->buf[++i]='\0';
+    sb->len=i;
+}
+
+//删除sb缓冲区从pos坐标长度为len的内容
+void strbuf_remove(struct strbuf *sb,size_t pos,size_t len){
+    memmove(sb->buf+pos,sb->buf+pos+len,sb->len-pos-len+1);
+}
+
+
+
 
 
