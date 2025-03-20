@@ -6,6 +6,8 @@
 
 #define BUFFER_SIZE 4096
 
+//dfdf
+
 int main(int argc,char *argv[]){
     int append_mode=0;
     char **files = NULL;
