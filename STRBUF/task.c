@@ -148,6 +148,30 @@ void strbuf_remove(struct strbuf *sb,size_t pos,size_t len){
 }
 
 
+//-----------------------------------------------------------------------------------
+
+//将文件描述为fd的所有内容追加到sb中，sb增长hint？hint：8192大小
+size_t strbuf_read(struct strbuf *sb,int fd,size_t hint){
+    if(hint){
+        strbuf_grow(sb,hint);
+    }else{
+        strbuf_grow(sb,8192);
+    }
+    FILE *fp = fdopen(fd,"r");
+    for(char ch;(ch=fgetc(fp)!=EOF);){
+        strbuf_addch(sb,ch);
+    }
+    return sb->len;
+}
+
+//将文件句柄为fp的一行内容（抛弃换行符）读取到sb
+int strbuf_getline(struct strbuf* sb,FILE *fp){
+    for(char ch;(ch=fgetc(fp)!='\n'&&ch!=EOF);){
+        strbuf_attch(sb,ch);
+    }
+}
+
+
 
 
 
