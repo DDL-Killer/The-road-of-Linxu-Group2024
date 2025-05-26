@@ -9,8 +9,6 @@ int main(){
     pipe(fdpipe);
     int aa = fork();
 
-
-
     int bb = fork();
 
 
