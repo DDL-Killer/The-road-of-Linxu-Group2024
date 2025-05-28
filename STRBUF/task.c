@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<stdbool.h>
 struct strbuf
 {
     int len;//buf缓冲区的长度
@@ -147,6 +148,89 @@ void strbuf_remove(struct strbuf *sb,size_t pos,size_t len){
     memmove(sb->buf+pos,sb->buf+pos+len,sb->len-pos-len+1);
 }
 
+
+//----------------------------------
+//将文件描述符为fd的所有文件追加到sb，sb增长hint？hint：8192
+size_t strbuf_read(struct strbuf *sb,int fd,size_t hint){
+    strbuf_grow(sb,hint?hint:8192);
+    FILE *fp=fdopen(fd,"r");
+    char ch;
+    for(;(ch = fgetc(fp))!= EOF;){
+        strbuf_addch(sb,ch);
+    }
+    return sb->len;
+}
+
+
+//将文件句柄为fp的一行内容（抛弃换行符）读取到sb
+int strbuf_getline(struct strbuf *sb,FILE *fp){
+    char ch;
+    for(;ch = fgetc(fp)!=EOF&&ch!='\n';){
+        strbuf_addch(sb,ch);
+        return sb->len;
+    }
+}
+
+
+/**
+* @brief 将指定长度的字符串按切割字符切割成多个 strbuf
+*
+* @param str 要切割的字符串
+* @param len 字符串的长度
+* @param terminator 切割字符
+* @param max 最大切割数量（可选）
+* @return struct strbuf** 指向 struct strbuf 的指针数组，数组的最后一个元素为 NULL
+*
+* @note 函数将字符串 str 根据切割字符 terminator 切割成多个 strbuf，并返回结果。可选参数 max 用于限定最大切割数量。
+*/
+//-----------------------------------------------------
+//1. 将指定长度的字符串按切割字符切割成多个strbuf
+struct strbuf** strbuf_split_buf(const char* str, size_t len, int terminator, int max){
+    struct strbuf** ret = (struct strbuf**)malloc(sizeof(struct strbuf*)*(max+1));
+    for(int pos = 0,flag = 0,n = 0;pos<=len && n<max ;pos++){
+        while(str[flag]==terminator)  pos = flag++ + 2;
+        if(pos == len || pos>flag && str[pos] == terminator){
+            ret[n] = (struct strbuf *)malloc(sizeof(struct strbuf));
+            strbuf_init(ret[n],0);
+            strbuf_add(ret[n],str+flag,pos-flag);
+            while(str[pos] == terminator) flag = pos++;
+            ret[++n]=NULL;
+        }
+    }
+    return ret;
+}              
+
+/**
+* @brief 判断目标字符串是否以指定前缀开头
+*
+* @param target_str 目标字符串
+* @param str 前缀字符串
+* @param strlen target_str 的长度
+* @return bool 前缀相同返回 true，否则返回 false
+*/
+bool strbuf_begin_judge(char* target_str, const char* str, int strnlen){
+    return str == NULL || !strncmp(target_str,str,strlen(str));
+}
+
+
+/**
+* @brief 获取目标字符串的指定子串
+*
+* @param target_buf 目标字符串
+* @param begin 开始下标（包含）
+* @param end 结束下标（不包含）
+* @param len target_buf 的长度
+* @return char* 指向获取的子串的指针，如果参数不合法则返回 NULL
+*
+* @note 下标从0开始，[begin, end)表示左闭右开区间
+*/
+char* strbuf_get_mid_buf(char* target_buf, int begin, int end, int len){
+    if(begin > end || end>= len) return NULL;
+    char* str = (char*)malloc(end-begin+1);
+    memcpy(str,target_buf+begin,end-begin);
+    str[end - begin]= '\0';
+    return str;
+}
 
 
 
