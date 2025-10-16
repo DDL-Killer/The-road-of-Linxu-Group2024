@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "6.19.C": "cpp"
+        "6.19.C": "cpp",
+        "stdlib.h": "c",
+        "stdio.h": "c",
+        "math.h": "c"
     }
 }

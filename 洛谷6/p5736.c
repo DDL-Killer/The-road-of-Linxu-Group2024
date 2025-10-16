@@ -5,7 +5,8 @@ int sushu(int a){
     else if(a==2) return 1;
     else if(a%2==0) return 0;
     else{
-        for(int i = 3;i<=sqrt(a);i++){
+        double b =sqrt(a);
+        for(int i = 3;i<=(int)b;i++){
             if(a%i==0){
                 return 0;
             }
@@ -13,6 +14,7 @@ int sushu(int a){
         return 1;
     }
 }
+
 int main(){
     int num;
     scanf("%d",&num);
